@@ -1,9 +1,5 @@
-import HomeComponent from '@/components/showSection/home/HomeComponent';
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div className="flex h-full w-full">
-      <HomeComponent />
-    </div>
-  );
+  return redirect('/login');
 }

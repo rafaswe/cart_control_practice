@@ -1,8 +1,12 @@
-type ImagePropType = { id: number; image: string; altText: string };
-export type OnlinePresence = {
-  id: number;
-  imageURL: string;
-  title: string;
+export type TopRatingsInfoProps = {
+  ratings: {
+    outOf: number;
+    total: number;
+  };
   description: string;
-  url: string;
+  userInfo: {
+    image: string;
+    name: string;
+    proffession: string;
+  };
 };
