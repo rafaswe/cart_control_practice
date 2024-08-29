@@ -26,7 +26,8 @@ module.exports = {
       "4xl": "32px",
       "5xl": "40px",
       "6xl": "48px",
-      "7xl": "60px",
+      "7xl": "52px",
+      "8xl": "60px",
     },
     fontWeight: {
       thin: "100",
@@ -66,6 +67,9 @@ module.exports = {
         "alert-tint": "#FFFAF1",
         success: "#14A5AB",
         "success-tint": "#EEF9F9",
+        brand: {
+          1: "#52525B",
+        },
       },
       screens: {
         xs: "350px",
