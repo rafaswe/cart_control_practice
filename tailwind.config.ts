@@ -7,12 +7,9 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    // fontFamily: {
-    //   sans: ["Inter", "sans-serif"],
-    //   serif: ["Inter", "sans-serif"],
-    //   poppins: ["Poppins", "sans-serif"],
-    //   mono: ["Share Tech Mono", "monospace"],
-    // },
+    fontFamily: {
+      poppins: ["Poppins", "sans-serif"],
+    },
     fontSize: {
       xxs: "10px",
       xs: "12px",
@@ -23,7 +20,7 @@ module.exports = {
       xl: "22px",
       "2xl": "24px",
       "3xl": "30px",
-      "4xl": "32px",
+      "4xl": "36px",
       "5xl": "40px",
       "6xl": "48px",
       "7xl": "52px",
@@ -58,7 +55,10 @@ module.exports = {
         secondary: "#858585 ",
         "secondary-tint": "#E5E7EB ",
         "secondary-tint-light": "#FBFBFB ",
-        border: "#3A72ED",
+        border: {
+          1: "#3A72ED",
+          2: "#CBD5E1",
+        },
         error: "#B2192C",
         "error-tint": "#F9EFF0",
         "error-tint-light": "#F9DCDE",
@@ -69,6 +69,9 @@ module.exports = {
         "success-tint": "#EEF9F9",
         brand: {
           1: "#52525B",
+          2: "#545454",
+          3: "#F9F9F9",
+          4: "#4B4B4B",
         },
       },
       screens: {
