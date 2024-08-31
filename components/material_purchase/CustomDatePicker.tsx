@@ -53,9 +53,6 @@ export const CustomDatePicker = ({
                   handleIconClick();
                 }}>
                 <DatePicker
-                  showMonthDropdown
-                  showYearDropdown
-                  scrollableYearDropdown
                   dropdownMode="select"
                   placeholderText={placeholderText ?? "dd/mm/yyyy"}
                   readOnly
@@ -70,7 +67,7 @@ export const CustomDatePicker = ({
                   className={`h-10  w-full cursor-pointer  z-100 rounded-lg border border-[#DDDDDD] bg-white pl-3 pr-2 text-sm focus:outline-none sm:h-12 md:text-base`}
                   minDate={new Date()}
                   open={isCalenderOpen}
-                  popperClassName="z-100"
+                  popperClassName="md:w-fit w-[220px] text-xs md:text-sm mt-1 -ml-6 sm:-ml-0  box-content h-full"
                 />
               </div>
             );
