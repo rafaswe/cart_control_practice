@@ -11,6 +11,7 @@ const MaterialPurchaseContainer = () => {
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [transactionData, setTransactionData] = useState([]);
 
   //hooks
   const email = useSelector((state: RootState) => state.auth.email);
@@ -54,7 +55,7 @@ const MaterialPurchaseContainer = () => {
     };
 
     fetchMaterialPurchases();
-  }, []);
+  }, [transactionData, token]);
 
   return (
     <div className="w-full flex flex-col gap-16">
@@ -89,9 +90,9 @@ const MaterialPurchaseContainer = () => {
           <TransactionTable tableData={tableData} />
         </div>
       </div>
-      {!isModalOpen && (
+      {isModalOpen && (
         <button
-          className="fixed inset-0 bg-black w-full bg-opacity-50 flex justify-center items-center z-50"
+          className="fixed inset-0 bg-black w-full bg-opacity-50 flex justify-center items-center z-40"
           onClick={handleCloseModal}>
           <button
             className="bg-white border-b-[18px] border-b-primary w-10/12 rounded-lg"
@@ -105,14 +106,12 @@ const MaterialPurchaseContainer = () => {
               <div className="w-11/12 mx-auto">
                 {/* Wrapping div to control overflow */}
                 <div className="">
-                  <ModalTransactionTable />
+                  <ModalTransactionTable
+                    setTransactionData={setTransactionData}
+                    setIsModalOpen={setIsModalOpen}
+                  />
                 </div>
               </div>
-              <button
-                className="px-4 py-2 bg-primary text-white rounded-lg"
-                onClick={handleCloseModal}>
-                Close
-              </button>
             </div>
           </button>
         </button>
