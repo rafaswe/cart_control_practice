@@ -4,18 +4,26 @@ import { format } from "date-fns";
 import Image from "next/image";
 import { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import ModalTransactionTable from "./ModalTransectionTable.container";
 
 const MaterialPurchaseContainer = () => {
   //state
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   //hooks
   const email = useSelector((state: RootState) => state.auth.email);
   const token = useSelector((state: RootState) => state.auth.token);
 
   //Actions
-  const handleAddMaterial = () => {};
+  const handleAddMaterial = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     const fetchMaterialPurchases = async () => {
@@ -47,7 +55,7 @@ const MaterialPurchaseContainer = () => {
 
     fetchMaterialPurchases();
   }, []);
-  console.log(tableData);
+
   return (
     <div className="w-full flex flex-col gap-16">
       {/* nav bar  */}
@@ -81,6 +89,34 @@ const MaterialPurchaseContainer = () => {
           <TransactionTable tableData={tableData} />
         </div>
       </div>
+      {!isModalOpen && (
+        <button
+          className="fixed inset-0 bg-black w-full bg-opacity-50 flex justify-center items-center z-50"
+          onClick={handleCloseModal}>
+          <button
+            className="bg-white border-b-[18px] border-b-primary w-10/12 rounded-lg"
+            onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-lg py-4 bg-primary text-white font-semibold ">
+              Material Purchase
+            </h2>
+            {/* Add your form or content here */}
+            <div className="py-6">
+              {/* Data section */}
+              <div className="w-11/12 mx-auto">
+                {/* Wrapping div to control overflow */}
+                <div className="">
+                  <ModalTransactionTable />
+                </div>
+              </div>
+              <button
+                className="px-4 py-2 bg-primary text-white rounded-lg"
+                onClick={handleCloseModal}>
+                Close
+              </button>
+            </div>
+          </button>
+        </button>
+      )}
     </div>
   );
 };
