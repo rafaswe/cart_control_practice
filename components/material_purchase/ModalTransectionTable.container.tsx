@@ -50,7 +50,11 @@ const transactionSchema = z.object({
   ),
 });
 
-const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
+const ModalTransactionTable = ({
+  setTransactionData,
+  setIsModalOpen,
+  setPage,
+}) => {
   // state
   const [hasError, setHasError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -95,6 +99,7 @@ const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
           onSuccess: (response) => {
             setTransactionData(data.transactions);
             toast.success("Data saved successfully!");
+            setPage(1);
           },
           onError: () => {
             toast.error("Something went wrong! Try Again..");

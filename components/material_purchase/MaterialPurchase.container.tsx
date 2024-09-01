@@ -15,6 +15,7 @@ const MaterialPurchaseContainer = () => {
   const [tableData, setTableData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
+  const [totalItems, setTotalItems] = useState();
   const [page, setPage] = useState(1);
 
   //hooks
@@ -45,6 +46,7 @@ const MaterialPurchaseContainer = () => {
           privateRoute: true,
           onSuccess: (data) => {
             setTableData(data?.material_purchase_list?.data || []);
+            setTotalItems(data?.material_purchase_list?.total);
           },
           onError: () => {
             toast.error("Something went wrong...");
@@ -100,7 +102,7 @@ const MaterialPurchaseContainer = () => {
         <Skeleton />
       )}
       <div className="px-[5%] w-full flex justify-between items-center">
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <label htmlFor="pageNumber" className="md:text-lg font-semibold">
             Page:
           </label>
@@ -112,6 +114,11 @@ const MaterialPurchaseContainer = () => {
             onChange={handlePageChange}
             className="border border-gray-300 rounded-md focus:outline-none px-2 py-1 w-16"
           />
+          {totalItems && tableData?.length > 0 ? (
+            <div>
+              Showing {tableData?.length} from {totalItems}
+            </div>
+          ) : null}
         </div>
       </div>
       {isModalOpen && (
@@ -131,6 +138,7 @@ const MaterialPurchaseContainer = () => {
                   <ModalTransactionTable
                     setTransactionData={setTransactionData}
                     setIsModalOpen={setIsModalOpen}
+                    setPage={setPage}
                   />
                 </div>
               </div>
@@ -145,7 +153,9 @@ const MaterialPurchaseContainer = () => {
 const TransactionTable = ({ tableData }) => {
   //Action
   function formatDate(dateStr) {
+    if (!dateStr) return "Invalid Date";
     const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return "Invalid Date";
     return format(date, "dd MMM, yyyy");
   }
 
@@ -207,7 +217,7 @@ const TransactionTable = ({ tableData }) => {
                       {card_number}
                     </td>
                     <td className="p-2 md:p-3.5 border border-white text-center text-brand-4 font-semibold">
-                      {formatDate(transaction_date)}
+                      {formatDate(transaction_date) ?? transaction_date}
                     </td>
                   </tr>
                 );
