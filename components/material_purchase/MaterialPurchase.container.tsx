@@ -7,6 +7,7 @@ import { Fragment, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import NoDataFoundComponent from "../common/NoDataFound.component";
+import Skeleton from "../common/Skeleton";
 import ModalTransactionTable from "./ModalTransectionTable.container";
 
 const MaterialPurchaseContainer = () => {
@@ -89,7 +90,9 @@ const MaterialPurchaseContainer = () => {
             <TransactionTable tableData={tableData} />
           </div>
         </div>
-      ) : null}
+      ) : (
+        <Skeleton />
+      )}
       {isModalOpen && (
         <button
           className="fixed inset-0 bg-black w-full bg-opacity-50 flex justify-center items-center z-40"
