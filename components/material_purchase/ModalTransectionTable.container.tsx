@@ -112,171 +112,170 @@ const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="w-full flex flex-col gap-6">
-      <div className="lg:overflow-x-hidden  overflow-x-auto max-h-[250px] ">
-        <table className="w-full mx-auto shadow-lg overflow-visible">
-          <thead className="overflow-visible">
-            <tr>
-              <th className="py-4 bg-brand-5 border ">Items</th>
-              <th className="py-4 bg-brand-5 border ">Store</th>
-              <th className="py-4 bg-brand-5 border ">{`Runner's Name`}</th>
-              <th className="py-4 bg-brand-5 border ">Amount</th>
-              <th className="py-4 bg-brand-5 border ">Card No</th>
-              <th className="py-4 bg-brand-5 border ">Transaction Date</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody className="overflow-visible">
-            {fields.map((field, index) => (
-              <tr
-                key={field.id}
-                className={`${index % 2 !== 0 && "bg-brand-5"}`}>
-                <td className="border">
-                  <Controller
-                    control={control}
-                    name={`transactions.${index}.line_item_name`}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        type="text"
-                        className={`border p-2.5 w-10/12 min-w-[80px] focus:outline-none rounded-lg ${
-                          errors.transactions?.[index]?.line_item_name &&
-                          "border-red-500"
-                        }`}
-                        placeholder="Items"
-                      />
-                    )}
+      <div className="overflow-x-auto w-full max-h-[250px]">
+        {/* table Segment  */}
+        <div className="grid grid-cols-12 w-[1500px] lg:w-full min-w-[1500px]">
+          <div className="col-span-2 py-1 md:py-4 bg-brand-5 border border-secondary-tint text-center">
+            Items*
+          </div>
+          <div className="col-span-2 py-1 md:py-4 bg-brand-5 border border-secondary-tint text-center">
+            Store*
+          </div>
+          <div className="col-span-2 py-1 md:py-4 bg-brand-5 border border-secondary-tint text-center">
+            {`Runner's Name`}
+          </div>
+          <div className="col-span-1 py-1 md:py-4 bg-brand-5 border border-secondary-tint text-center">
+            Amount*
+          </div>
+          <div className="col-span-2 py-1 md:py-4 bg-brand-5 border border-secondary-tint text-center">
+            Card No*
+          </div>
+          <div className="col-span-2 py-1 md:py-4 bg-brand-5 border border-secondary-tint text-center">
+            Transaction Date*
+          </div>
+          <div className=""></div>
+        </div>
+
+        {fields.map((field, index) => (
+          <div
+            key={field.id}
+            className={`${
+              index % 2 !== 0 && "bg-brand-5"
+            } grid grid-cols-12  w-[1500px] lg:w-full min-w-[1500px]`}>
+            <div className="border border-secondary-tint col-span-2 p-2  text-center">
+              <Controller
+                control={control}
+                name={`transactions.${index}.line_item_name`}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="text"
+                    className={`border-2 border-secondary-tint p-2.5 w-11/12 focus:outline-none rounded-lg ${
+                      errors.transactions?.[index]?.line_item_name &&
+                      "border-red-500"
+                    }`}
+                    placeholder="Items"
                   />
-                </td>
-                <td className="p-2 border">
-                  <Controller
-                    control={control}
-                    name={`transactions.${index}.store`}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        type="text"
-                        className={`border p-2.5 w-10/12 min-w-[80px] focus:outline-none rounded-lg ${
-                          errors.transactions?.[index]?.store &&
-                          "border-red-500"
-                        }`}
-                        placeholder="Store"
-                      />
-                    )}
+                )}
+              />
+            </div>
+            <div className="p-2 border border-secondary-tint col-span-2  text-center">
+              <Controller
+                control={control}
+                name={`transactions.${index}.store`}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="text"
+                    className={`border-2 border-secondary-tint p-2.5 w-11/12 focus:outline-none rounded-lg ${
+                      errors.transactions?.[index]?.store && "border-red-500"
+                    }`}
+                    placeholder="Store"
                   />
-                </td>
-                <td className="p-2 border">
-                  <Controller
-                    control={control}
-                    name={`transactions.${index}.runners_name`}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        type="text"
-                        className={`border p-2.5 w-10/12 min-w-[80px] focus:outline-none rounded-lg ${
-                          errors.transactions?.[index]?.runners_name &&
-                          "border-red-500"
-                        }`}
-                        placeholder="Runner's Name"
-                      />
-                    )}
+                )}
+              />
+            </div>
+            <div className="p-2 border border-secondary-tint col-span-2  text-center">
+              <Controller
+                control={control}
+                name={`transactions.${index}.runners_name`}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="text"
+                    className={`border-2 border-secondary-tint p-2.5 w-11/12 focus:outline-none rounded-lg ${
+                      errors.transactions?.[index]?.runners_name &&
+                      "border-red-500"
+                    }`}
+                    placeholder="Runner's Name"
                   />
-                </td>
-                <td className="p-2 border flex gap-1 items-center">
-                  <p>$</p>
-                  <Controller
-                    control={control}
-                    name={`transactions.${index}.amount`}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        type="number"
-                        className={`border p-2.5 max-w-[100px] focus:outline-none rounded-lg ${
-                          errors.transactions?.[index]?.amount &&
-                          "border-red-500"
-                        }`}
-                        placeholder="Amount"
-                      />
-                    )}
+                )}
+              />
+            </div>
+            <div className="p-2 border border-secondary-tint flex items-center gap-0.5 col-span-1  text-center">
+              <p>$</p>
+              <Controller
+                control={control}
+                name={`transactions.${index}.amount`}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="number"
+                    className={`border-2 border-secondary-tint p-2.5 w-11/12 focus:outline-none rounded-lg ${
+                      errors.transactions?.[index]?.amount && "border-red-500"
+                    }`}
+                    placeholder="Amount"
                   />
-                </td>
-                <td className="p-2 border">
-                  <Controller
-                    control={control}
-                    name={`transactions.${index}.card_number`}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        type="text"
-                        className={`border p-2.5 max-w-[80px] focus:outline-none rounded-lg ${
-                          errors.transactions?.[index]?.card_number &&
-                          "border-red-500"
-                        }`}
-                        placeholder="Card No"
-                      />
-                    )}
+                )}
+              />
+            </div>
+            <div className="p-2 border border-secondary-tint col-span-2  text-center">
+              <Controller
+                control={control}
+                name={`transactions.${index}.card_number`}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="text"
+                    className={`border-2 border-secondary-tint p-2.5 w-11/12 focus:outline-none rounded-lg ${
+                      errors.transactions?.[index]?.card_number &&
+                      "border-red-500"
+                    }`}
+                    placeholder="Card No"
                   />
-                </td>
-                <td className="p-2 border ">
-                  <CustomDatePicker
-                    control={control}
-                    setValue={setValue}
-                    errors={errors}
-                    controllerName={`transactions.${index}.transaction_date`}
-                  />
-                </td>
-                <td className="bg-white">
-                  <button
-                    type="button"
-                    onClick={() => remove(index)}
-                    className="flex items-center justify-center">
-                    <Image
-                      src="/images/delete.svg"
-                      alt="Delete Btn"
-                      width={32}
-                      height={32}
-                      className="pl-2"
-                    />
-                  </button>
-                </td>
-              </tr>
-            ))}
-            <tr>
-              <td className="border border-r-0"></td>
-              <td className="border-y"></td>
-              <td className="border-y"></td>
-              <td className="border-y"></td>
-              <td className="border-y"></td>
-              <td className=" py-2 pr-3 flex justify-end border border-l-0">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setHasError(false);
-                    append({
-                      line_item_name: "",
-                      store: "",
-                      runners_name: "",
-                      amount: 0,
-                      card_number: "",
-                      transaction_date: null,
-                    });
-                  }}
-                  className="">
-                  <Image
-                    src="/images/add.svg"
-                    alt="Add"
-                    width={32}
-                    height={32}
-                  />
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                )}
+              />
+            </div>
+            <div className="p-2 border border-secondary-tint col-span-2  text-center ">
+              <CustomDatePicker
+                control={control}
+                setValue={setValue}
+                errors={errors}
+                controllerName={`transactions.${index}.transaction_date`}
+              />
+            </div>
+            <div className="bg-white p-2 col-span-1 flex items-center">
+              <button
+                type="button"
+                onClick={() => remove(index)}
+                className="flex items-center justify-center">
+                <Image
+                  src="/images/delete.svg"
+                  alt="Delete Btn"
+                  width={32}
+                  height={32}
+                  className="pl-2"
+                />
+              </button>
+            </div>
+          </div>
+        ))}
+        <div className="pt-5 grid grid-cols-12 w-full  justify-end">
+          <div className="col-span-11 flex lg:justify-end">
+            <button
+              type="button"
+              onClick={() => {
+                setHasError(false);
+                append({
+                  line_item_name: "",
+                  store: "",
+                  runners_name: "",
+                  amount: 0,
+                  card_number: "",
+                  transaction_date: null,
+                });
+              }}
+              className="">
+              <Image src="/images/add.svg" alt="Add" width={32} height={32} />
+            </button>
+          </div>
+          <div></div>
+        </div>
       </div>
       <div className="text-error">
         {hasError ? <p>At least One Item Has to be Set</p> : <p></p>}
       </div>
-      <div className="self-end mr-9">
+      <div className="self-end mx-auto lg:mr-9">
         <button
           type="submit"
           className="px-10 py-3 bg-primary text-white rounded-lg">

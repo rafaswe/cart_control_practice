@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import { Controller, UseFormSetValue } from "react-hook-form";
+import { useOnClickOutside } from "usehooks-ts";
 
 interface CustomDatePickerType {
   controllerName: string;
@@ -9,10 +10,6 @@ interface CustomDatePickerType {
   errors: any;
   setValue: UseFormSetValue<any>;
   placeholderText?: string;
-  label?: string;
-  labelClass?: string;
-  dependentField?: string;
-  mendatory?: boolean;
 }
 export const CustomDatePicker = ({
   controllerName,
@@ -28,9 +25,9 @@ export const CustomDatePicker = ({
       setIsCalenderOpen(true);
     }
   };
-  //   useOnClickOutside(calenderRef, () => {
-  //     setIsCalenderOpen(false);
-  //   });
+  useOnClickOutside(calenderRef, () => {
+    setIsCalenderOpen(false);
+  });
 
   const handleDateChange = (date) => {
     const modifiedDate = new Date(date);
@@ -47,7 +44,7 @@ export const CustomDatePicker = ({
           render={({ field }) => {
             const selectedDate = field.value ? new Date(field.value) : null;
             return (
-              <div
+              <button
                 className="relative w-full z-50"
                 onClick={() => {
                   handleIconClick();
@@ -64,12 +61,12 @@ export const CustomDatePicker = ({
                   }}
                   dateFormat="dd MMM, YYYY"
                   selected={selectedDate}
-                  className={`h-10  w-full cursor-pointer  z-100 rounded-lg border border-[#DDDDDD] bg-white pl-3 pr-2 text-sm focus:outline-none sm:h-12 md:text-base`}
+                  className={`h-10  w-full cursor-pointer  -z-100 rounded-lg border-2 border-[#E5E7EB] bg-white pl-3 pr-2 text-sm focus:outline-none sm:h-12 md:text-base`}
                   minDate={new Date()}
                   open={isCalenderOpen}
-                  popperClassName="md:w-fit w-[220px] text-xs md:text-sm mt-1 -ml-6 sm:-ml-0  box-content h-full"
+                  popperClassName="md:w-fit w-[220px] z-50 text-xs md:text-sm mt-1 -ml-6 sm:-ml-0  box-content h-full"
                 />
-              </div>
+              </button>
             );
           }}
         />

@@ -8,6 +8,3 @@ input:-webkit-autofill {
   -webkit-text-fill-color: #000 !important;
   transition: background-color 5000s ease-in-out 0s;
 }
-.react-datepicker {
-  z-index: 9999 !important; /* Ensure this is higher than any other z-index on the page */
-}

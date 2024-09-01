@@ -9,7 +9,6 @@ import ModalTransactionTable from "./ModalTransectionTable.container";
 const MaterialPurchaseContainer = () => {
   //state
   const [tableData, setTableData] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
 
@@ -26,6 +25,7 @@ const MaterialPurchaseContainer = () => {
     setIsModalOpen(false);
   };
 
+  //Effects
   useEffect(() => {
     const fetchMaterialPurchases = async () => {
       try {
@@ -46,19 +46,15 @@ const MaterialPurchaseContainer = () => {
         }
 
         const data = await response.json();
-        setTableData(data?.material_purchase_list?.data); // Assuming the API returns an array of transactions
-      } catch (error) {
-        console.error("Error fetching material purchases:", error);
-      } finally {
-        setLoading(false);
-      }
+        setTableData(data?.material_purchase_list?.data);
+      } catch (error) {}
     };
 
     fetchMaterialPurchases();
   }, [transactionData, token]);
 
   return (
-    <div className="w-full flex flex-col gap-16">
+    <div className="w-full flex flex-col gap-4 pb-16 md:gap-16">
       {/* nav bar  */}
       <div className="h-[91px] w-full shadow-lg flex pl-[5%] items-center">
         {email ? (
@@ -75,13 +71,13 @@ const MaterialPurchaseContainer = () => {
       </div>
       {/* Purchase List  */}
       <div className="px-[5%] w-full flex-1">
-        <div className="w-10/12 flex flex-col gap-6">
-          <div className="flex justify-between items-center">
-            <p className="text-4xl font-semibold text-primary">
+        <div className="w-full lg:w-10/12 flex flex-col gap-6">
+          <div className="flex md:flex-row flex-col justify-between items-center">
+            <p className="text-2xl md:text-4xl font-semibold text-primary">
               Material Purchase
             </p>
             <button
-              className="font-semibold text-white bg-primary px-6 py-3.5 rounded-lg"
+              className="font-semibold md:text-base text-sm text-white bg-primary px-3 md:px-6 py-2 md:py-3.5 rounded-lg"
               onClick={handleAddMaterial}>
               Add Material Purchase
             </button>
@@ -100,11 +96,9 @@ const MaterialPurchaseContainer = () => {
             <h2 className="text-lg py-4 bg-primary text-white font-semibold ">
               Material Purchase
             </h2>
-            {/* Add your form or content here */}
+
             <div className="py-6">
-              {/* Data section */}
               <div className="w-11/12 mx-auto">
-                {/* Wrapping div to control overflow */}
                 <div className="">
                   <ModalTransactionTable
                     setTransactionData={setTransactionData}
@@ -128,26 +122,26 @@ const TransactionTable = ({ tableData }) => {
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto md:text-base text-sm">
       <table className="min-w-full border-collapse">
         <thead>
           <tr className="bg-[#7A9FF0] text-white ">
-            <th className="p-3.5 border border-white text-center font-semibold">
+            <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
               NAME
             </th>
-            <th className="p-3.5 border border-white text-center font-semibold">
+            <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
               STORE
             </th>
-            <th className="p-3.5 border border-white text-center font-semibold">
+            <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
               {`Runner's Name`}
             </th>
-            <th className="p-3.5 border border-white text-center font-semibold">
+            <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
               AMOUNT
             </th>
-            <th className="p-3.5 border border-white text-center font-semibold">
+            <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
               CARD NO.
             </th>
-            <th className="p-3.5 border border-white text-center font-semibold">
+            <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
               TRANSACTION DATE
             </th>
           </tr>
@@ -169,22 +163,22 @@ const TransactionTable = ({ tableData }) => {
                   <tr
                     key={id}
                     className={index % 2 !== 0 ? "bg-[#E3E9F7]" : "bg-white"}>
-                    <td className="p-3.5 border border-white text-center text-brand-4 font-semibold">
+                    <td className="p-2 md:p-3.5 border border-white text-center text-brand-4 font-semibold">
                       {line_item_name}
                     </td>
-                    <td className="p-3.5 border border-white text-center text-brand-4 font-semibold">
+                    <td className="p-2 md:p-3.5 border border-white text-center text-brand-4 font-semibold">
                       {store}
                     </td>
-                    <td className="p-3.5 border border-white text-center text-brand-4 font-semibold">
+                    <td className="p-2 md:p-3.5 border border-white text-center text-brand-4 font-semibold">
                       {runners_name}
                     </td>
-                    <td className="p-3.5 border border-white text-center text-brand-4 font-semibold">
+                    <td className="p-2 md:p-3.5 border border-white text-center text-brand-4 font-semibold">
                       ${amount}
                     </td>
-                    <td className="p-3.5 border border-white text-center text-brand-4 font-semibold">
+                    <td className="p-2 md:p-3.5 border border-white text-center text-brand-4 font-semibold">
                       {card_number}
                     </td>
-                    <td className="p-3.5 border border-white text-center text-brand-4 font-semibold">
+                    <td className="p-2 md:p-3.5 border border-white text-center text-brand-4 font-semibold">
                       {formatDate(transaction_date)}
                     </td>
                   </tr>

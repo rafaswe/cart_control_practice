@@ -56,9 +56,11 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-10">
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-col gap-3">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col gap-2 md:gap-10">
+      <div className="flex flex-col md:gap-2">
+        <div className="flex flex-col gap-1 md:gap-3">
           <label htmlFor="email" className="font-medium ">
             Email
           </label>
@@ -74,17 +76,19 @@ const LoginForm: React.FC = () => {
                   message: "Invalid email address",
                 },
               })}
-              className="p-3.5 rounded-xl text-base border w-full border-border-2 focus:outline-none"
+              className="p-2 md:p-3.5 rounded-xl text-base border w-full border-border-2 focus:outline-none"
             />
-            <div className="h-5">
+            <div className="h-3 md:h-5">
               {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email.message}</p>
+                <p className="text-red-500 text-xs md:text-sm">
+                  {errors.email.message}
+                </p>
               )}
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1 md:gap-3">
           <label htmlFor="password" className="font-medium">
             Password
           </label>
@@ -100,11 +104,11 @@ const LoginForm: React.FC = () => {
                   message: "Password must be at least 6 characters long",
                 },
               })}
-              className="p-3.5 rounded-xl text-base border w-full border-border-2 focus:outline-none"
+              className="p-2 md:p-3.5 rounded-xl text-base border w-full border-border-2 focus:outline-none"
             />
-            <div className="h-5">
+            <div className="h-3 md:h-5">
               {errors.password && (
-                <p className="text-red-500 text-sm">
+                <p className="text-red-500 text-xs md:text-sm">
                   {errors.password.message}
                 </p>
               )}
@@ -114,7 +118,7 @@ const LoginForm: React.FC = () => {
       </div>
       <button
         type="submit"
-        className="px-12 rounded-lg font-semibold py-3.5 bg-primary text-white w-fit">
+        className="px-6 md:px-12 ml-auto md:ml-0 rounded-lg md:text-base text-sm font-semibold py-2 md:py-3.5 bg-primary text-white w-fit">
         Sign In
       </button>
     </form>
