@@ -1,9 +1,12 @@
 "use client";
+import { useApiRequest } from "@/hooks/useApiRequest";
 import { RootState } from "@/store/store";
 import { format } from "date-fns";
 import Image from "next/image";
 import { Fragment, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import NoDataFoundComponent from "../common/NoDataFound.component";
 import ModalTransactionTable from "./ModalTransectionTable.container";
 
 const MaterialPurchaseContainer = () => {
@@ -14,7 +17,7 @@ const MaterialPurchaseContainer = () => {
 
   //hooks
   const email = useSelector((state: RootState) => state.auth.email);
-  const token = useSelector((state: RootState) => state.auth.token);
+  const { makeRequest, isLoading } = useApiRequest();
 
   //Actions
   const handleAddMaterial = () => {
@@ -29,29 +32,25 @@ const MaterialPurchaseContainer = () => {
   useEffect(() => {
     const fetchMaterialPurchases = async () => {
       try {
-        const response = await fetch(
-          "https://devapi.propsoft.ai/api/auth/interview/material-purchase",
-          {
-            method: "GET",
-
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch material purchases");
-        }
-
-        const data = await response.json();
-        setTableData(data?.material_purchase_list?.data);
-      } catch (error) {}
+        await makeRequest({
+          endpoint: "auth/interview/material-purchase",
+          method: "GET",
+          privateRoute: true,
+          onSuccess: (data) => {
+            setTableData(data?.material_purchase_list?.data || []);
+          },
+          onError: () => {
+            toast.error("Something went wrong...");
+          },
+        });
+      } catch (error) {
+        toast.error("Please Log in Again..");
+      } finally {
+      }
     };
 
     fetchMaterialPurchases();
-  }, [transactionData, token]);
+  }, [transactionData]);
 
   return (
     <div className="w-full flex flex-col gap-4 pb-16 md:gap-16">
@@ -70,22 +69,27 @@ const MaterialPurchaseContainer = () => {
         ) : null}
       </div>
       {/* Purchase List  */}
-      <div className="px-[5%] w-full flex-1">
-        <div className="w-full lg:w-10/12 flex flex-col gap-6">
-          <div className="flex md:flex-row flex-col justify-between items-center">
-            <p className="text-2xl md:text-4xl font-semibold text-primary">
-              Material Purchase
-            </p>
-            <button
-              className="font-semibold md:text-base text-sm text-white bg-primary px-3 md:px-6 py-2 md:py-3.5 rounded-lg"
-              onClick={handleAddMaterial}>
-              Add Material Purchase
-            </button>
-          </div>
+      {!isLoading ? (
+        <div className="px-[5%] w-full flex-1">
+          <div className="w-full lg:w-10/12 flex flex-col gap-6">
+            <div className="flex md:flex-row flex-col justify-between items-center">
+              <p className="text-2xl md:text-4xl font-semibold text-primary">
+                Material Purchase
+              </p>
+              <button
+                className={`font-semibold md:text-base text-sm text-white  px-3 md:px-6 py-2 md:py-3.5 rounded-lg ${
+                  tableData.length === 0 ? "bg-slate-100" : "bg-primary "
+                }`}
+                onClick={handleAddMaterial}
+                disabled={tableData.length === 0}>
+                Add Material Purchase
+              </button>
+            </div>
 
-          <TransactionTable tableData={tableData} />
+            <TransactionTable tableData={tableData} />
+          </div>
         </div>
-      </div>
+      ) : null}
       {isModalOpen && (
         <button
           className="fixed inset-0 bg-black w-full bg-opacity-50 flex justify-center items-center z-40"
@@ -123,31 +127,31 @@ const TransactionTable = ({ tableData }) => {
 
   return (
     <div className="overflow-x-auto md:text-base text-sm">
-      <table className="min-w-full border-collapse">
-        <thead>
-          <tr className="bg-[#7A9FF0] text-white ">
-            <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
-              NAME
-            </th>
-            <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
-              STORE
-            </th>
-            <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
-              {`Runner's Name`}
-            </th>
-            <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
-              AMOUNT
-            </th>
-            <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
-              CARD NO.
-            </th>
-            <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
-              TRANSACTION DATE
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {tableData ? (
+      {tableData.length > 0 ? (
+        <table className="min-w-full border-collapse">
+          <thead>
+            <tr className="bg-[#7A9FF0] text-white ">
+              <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
+                NAME
+              </th>
+              <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
+                STORE
+              </th>
+              <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
+                {`Runner's Name`}
+              </th>
+              <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
+                AMOUNT
+              </th>
+              <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
+                CARD NO.
+              </th>
+              <th className="p-1 md:p-3.5 border border-white text-center font-semibold">
+                TRANSACTION DATE
+              </th>
+            </tr>
+          </thead>
+          <tbody>
             <Fragment>
               {tableData?.map((transaction, index) => {
                 const {
@@ -185,11 +189,11 @@ const TransactionTable = ({ tableData }) => {
                 );
               })}
             </Fragment>
-          ) : (
-            <div></div>
-          )}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      ) : (
+        <NoDataFoundComponent />
+      )}
     </div>
   );
 };

@@ -14,6 +14,7 @@ const CustomDatePicker = ({
   min,
   ...otherProps
 }) => {
+  //actions
   const formatDate = (date) => {
     if (!showTimeInput) {
       const current = new Date();
@@ -23,9 +24,6 @@ const CustomDatePicker = ({
     }
     return moment(date).format("MM-DD-YYYY");
   };
-
-  const generateDateVal = (date) =>
-    !date ? null : typeof date === "string" ? new Date(date) : date;
 
   const handleChange = (date, handler) => {
     if (!date) {

@@ -1,9 +1,8 @@
-import { setCredentials } from "@/store/slices/authSlice";
-import { AppDispatch } from "@/store/store";
-import { useRouter } from "next/navigation";
+import { useApiRequest } from "@/hooks/useApiRequest";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
+import Spinner from "../common/Spinner.component";
 
 // Define the TypeScript types for the form inputs
 interface LoginFormInputs {
@@ -12,45 +11,36 @@ interface LoginFormInputs {
 }
 
 const LoginForm: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
+  //Hooks
+  const { makeRequest, isLoading } = useApiRequest();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInputs>();
 
+  //Actions
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     try {
-      const response = await fetch(
-        "https://devapi.propsoft.ai/api/interview/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: data.email,
-            password: data.password,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Login failed");
-      }
-
-      const result = await response.json();
-
-      dispatch(
-        setCredentials({
-          email: result.user_data.email,
-          token: result.access_token,
-        })
-      );
-
-      router.push("/material_purchase");
-    } catch (error) {}
+      await makeRequest({
+        endpoint: "interview/login",
+        method: "POST",
+        body: {
+          email: data.email,
+          password: data.password,
+        },
+        isLogin: true,
+        redirectTo: "/material_purchase",
+        onSuccess: (result) => {
+          toast.success("Log in Successful");
+        },
+        onError: () => {
+          toast.error("Login failed. Please Try Again later");
+        },
+      });
+    } catch (error) {
+      toast.error("An error occurred.");
+    }
   };
 
   return (
@@ -116,8 +106,9 @@ const LoginForm: React.FC = () => {
       </div>
       <button
         type="submit"
-        className="px-6 md:px-12 ml-auto md:ml-0 rounded-lg md:text-base text-sm font-semibold py-2 md:py-3.5 bg-primary text-white w-fit">
-        Sign In
+        className="w-28 md:w-36 ml-auto md:ml-0 rounded-lg flex items-center justify-center gap-1 md:text-base text-sm font-semibold py-2 md:py-3.5 bg-primary text-white">
+        {isLoading ? <Spinner className="w-4 h-4" /> : null}
+        <p>Sign In</p>
       </button>
     </form>
   );

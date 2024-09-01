@@ -1,11 +1,12 @@
-import { RootState } from "@/store/store";
+import { useApiRequest } from "@/hooks/useApiRequest";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 import { z } from "zod";
+import Spinner from "../common/Spinner.component";
 import CustomDatePicker from "./CustomDatePicker.component";
 
 // Define the Zod schema for validation
@@ -50,13 +51,16 @@ const transactionSchema = z.object({
 });
 
 const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
+  // state
   const [hasError, setHasError] = useState(false);
-  const token = useSelector((state: RootState) => state.auth.token);
+  const [loading, setLoading] = useState(false);
+
+  //hooks
+  const { makeRequest, isLoading } = useApiRequest();
   const {
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
   } = useForm({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
@@ -72,37 +76,41 @@ const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
       ],
     },
   });
-
   const { fields, append, remove } = useFieldArray({
     control,
     name: "transactions",
   });
 
+  //actions
   const onSubmit = async (data) => {
+    setLoading(true);
     if (data?.transactions?.length > 0) {
       setHasError(false);
       try {
-        const response = await fetch(
-          "https://devapi.propsoft.ai/api/auth/interview/material-purchase",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ material_purchase: data.transactions }),
-          }
-        );
-
-        if (response.ok) {
-          await response.json().then(() => {
+        await makeRequest({
+          endpoint: "auth/interview/material-purchase",
+          method: "POST",
+          body: { material_purchase: data.transactions },
+          privateRoute: true,
+          onSuccess: (response) => {
             setTransactionData(data.transactions);
-            setIsModalOpen(false);
-          });
-        } else {
-        }
-      } catch (error) {}
-    } else setHasError(true);
+            toast.success("Data saved successfully!");
+          },
+          onError: () => {
+            toast.error("Something went wrong! Try Again..");
+          },
+        });
+      } catch (error) {
+        toast.error("Something went wrong! Try Again..");
+      } finally {
+        setLoading(false);
+        setIsModalOpen(false);
+      }
+    } else {
+      toast.error("At least one Item has to be set");
+      setHasError(true);
+      setLoading(false);
+    }
   };
 
   return (
@@ -290,8 +298,9 @@ const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
         <div className="col-span-11 flex justify-end">
           <button
             type="submit"
-            className="px-8 md:px-10 py-2 md:py-3 bg-primary text-white rounded-lg ">
-            Save
+            className="w-24 md:w-28 flex justify-center gap-0.5 items-center py-2 md:py-3 bg-primary text-white rounded-lg ">
+            {loading ? <Spinner className="w-4 h-4" /> : null}
+            <p>Save</p>
           </button>
         </div>
         <div></div>
