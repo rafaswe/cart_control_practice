@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { z } from "zod";
-import { CustomDatePicker } from "./CustomDatePicker";
+import CustomDatePicker from "./CustomDatePicker.component";
 
 // Define the Zod schema for validation
 const transactionSchema = z.object({
@@ -95,42 +95,39 @@ const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
         );
 
         if (response.ok) {
-          const result = await response.json();
-          console.log("Submission successful:", result);
-          setTransactionData(data.transactions);
-          setIsModalOpen(false);
+          await response.json().then(() => {
+            setTransactionData(data.transactions);
+            setIsModalOpen(false);
+          });
         } else {
-          console.error("Submission failed:", response.statusText);
         }
-      } catch (error) {
-        console.error("Error submitting data:", error);
-        // Handle error (e.g., display an error message)
-      }
+      } catch (error) {}
     } else setHasError(true);
   };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full flex flex-col gap-6">
-      <div className="overflow-x-auto w-full max-h-[250px]">
+      className="w-full flex flex-col gap-4">
+      <div className="overflow-x-auto text-sm w-full pb-3 max-h-[250px]">
         {/* table Segment  */}
-        <div className="grid grid-cols-12 w-[1500px] lg:w-full min-w-[1500px]">
-          <div className="col-span-2 py-1 md:py-4 bg-brand-5 border border-secondary-tint text-center">
+        <div className="grid grid-cols-12 w-[1500px] text-brand-2 font-semibold xl:w-full min-w-[1500px] xl:min-w-fit">
+          <div className="col-span-2 py-1 md:py-3  bg-brand-5 border border-secondary-tint text-center">
             Items*
           </div>
-          <div className="col-span-2 py-1 md:py-4 bg-brand-5 border border-secondary-tint text-center">
+          <div className="col-span-2 py-1 md:py-3 bg-brand-5 border border-secondary-tint text-center">
             Store*
           </div>
-          <div className="col-span-2 py-1 md:py-4 bg-brand-5 border border-secondary-tint text-center">
+          <div className="col-span-2 py-1 md:py-3 bg-brand-5 border border-secondary-tint text-center">
             {`Runner's Name`}
           </div>
-          <div className="col-span-1 py-1 md:py-4 bg-brand-5 border border-secondary-tint text-center">
+          <div className="col-span-1 py-1 md:py-3 bg-brand-5 border border-secondary-tint text-center">
             Amount*
           </div>
-          <div className="col-span-2 py-1 md:py-4 bg-brand-5 border border-secondary-tint text-center">
+          <div className="col-span-2 py-1 md:py-3 bg-brand-5 border border-secondary-tint text-center">
             Card No*
           </div>
-          <div className="col-span-2 py-1 md:py-4 bg-brand-5 border border-secondary-tint text-center">
+          <div className="col-span-2 py-1 md:py-3 bg-brand-5 border border-secondary-tint text-center">
             Transaction Date*
           </div>
           <div className=""></div>
@@ -141,7 +138,7 @@ const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
             key={field.id}
             className={`${
               index % 2 !== 0 && "bg-brand-5"
-            } grid grid-cols-12  w-[1500px] lg:w-full min-w-[1500px]`}>
+            } grid grid-cols-12  w-[1500px] xl:w-full min-w-[1500px] xl:min-w-fit`}>
             <div className="border border-secondary-tint col-span-2 p-2  text-center">
               <Controller
                 control={control}
@@ -150,9 +147,10 @@ const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
                   <input
                     {...field}
                     type="text"
-                    className={`border-2 border-secondary-tint p-2.5 w-11/12 focus:outline-none rounded-lg ${
-                      errors.transactions?.[index]?.line_item_name &&
-                      "border-red-500"
+                    className={`border-2  p-2.5 w-11/12 focus:outline-none rounded-lg ${
+                      errors.transactions?.[index]?.line_item_name
+                        ? "border-error"
+                        : "border-secondary-tint"
                     }`}
                     placeholder="Items"
                   />
@@ -167,8 +165,10 @@ const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
                   <input
                     {...field}
                     type="text"
-                    className={`border-2 border-secondary-tint p-2.5 w-11/12 focus:outline-none rounded-lg ${
-                      errors.transactions?.[index]?.store && "border-red-500"
+                    className={`border-2  p-2.5 w-11/12 focus:outline-none rounded-lg ${
+                      errors.transactions?.[index]?.store
+                        ? "border-error"
+                        : "border-secondary-tint"
                     }`}
                     placeholder="Store"
                   />
@@ -183,9 +183,10 @@ const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
                   <input
                     {...field}
                     type="text"
-                    className={`border-2 border-secondary-tint p-2.5 w-11/12 focus:outline-none rounded-lg ${
-                      errors.transactions?.[index]?.runners_name &&
-                      "border-red-500"
+                    className={`border-2 p-2.5 w-11/12 focus:outline-none rounded-lg ${
+                      errors.transactions?.[index]?.runners_name
+                        ? "border-error"
+                        : "border-secondary-tint"
                     }`}
                     placeholder="Runner's Name"
                   />
@@ -201,8 +202,10 @@ const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
                   <input
                     {...field}
                     type="number"
-                    className={`border-2 border-secondary-tint p-2.5 w-11/12 focus:outline-none rounded-lg ${
-                      errors.transactions?.[index]?.amount && "border-red-500"
+                    className={`border-2  p-2.5 w-11/12 focus:outline-none rounded-lg ${
+                      errors.transactions?.[index]?.amount
+                        ? "border-error"
+                        : "border-secondary-tint"
                     }`}
                     placeholder="Amount"
                   />
@@ -217,9 +220,10 @@ const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
                   <input
                     {...field}
                     type="text"
-                    className={`border-2 border-secondary-tint p-2.5 w-11/12 focus:outline-none rounded-lg ${
-                      errors.transactions?.[index]?.card_number &&
-                      "border-red-500"
+                    className={`border-2 p-2.5 w-11/12 focus:outline-none rounded-lg ${
+                      errors.transactions?.[index]?.card_number
+                        ? "border-error"
+                        : "border-secondary-tint"
                     }`}
                     placeholder="Card No"
                   />
@@ -228,10 +232,17 @@ const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
             </div>
             <div className="p-2 border border-secondary-tint col-span-2  text-center ">
               <CustomDatePicker
+                name={`transactions.${index}.transaction_date`}
+                placeholder="Select a date"
                 control={control}
-                setValue={setValue}
-                errors={errors}
-                controllerName={`transactions.${index}.transaction_date`}
+                isRequired={true}
+                index={index}
+                showTimeInput={true}
+                isRangePicker={false}
+                error={!!errors.transactions?.[index]?.transaction_date}
+                isClearable
+                position="4/8"
+                min={new Date()}
               />
             </div>
             <div className="bg-white p-2 col-span-1 flex items-center">
@@ -275,12 +286,15 @@ const ModalTransactionTable = ({ setTransactionData, setIsModalOpen }) => {
       <div className="text-error">
         {hasError ? <p>At least One Item Has to be Set</p> : <p></p>}
       </div>
-      <div className="self-end mx-auto lg:mr-9">
-        <button
-          type="submit"
-          className="px-10 py-3 bg-primary text-white rounded-lg">
-          Save
-        </button>
+      <div className="grid grid-cols-12">
+        <div className="col-span-11 flex justify-end">
+          <button
+            type="submit"
+            className="px-8 md:px-10 py-2 md:py-3 bg-primary text-white rounded-lg ">
+            Save
+          </button>
+        </div>
+        <div></div>
       </div>
     </form>
   );

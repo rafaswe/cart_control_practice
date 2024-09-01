@@ -59,7 +59,7 @@ module.exports = {
           1: "#3A72ED",
           2: "#CBD5E1",
         },
-        error: "#B2192C",
+        error: "#ef4444",
         "error-tint": "#F9EFF0",
         "error-tint-light": "#F9DCDE",
         "error-tint-extra-light": "#FCEDEE",

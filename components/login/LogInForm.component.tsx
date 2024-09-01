@@ -41,7 +41,7 @@ const LoginForm: React.FC = () => {
       }
 
       const result = await response.json();
-      console.log("Login successful", result);
+
       dispatch(
         setCredentials({
           email: result.user_data.email,
@@ -50,9 +50,7 @@ const LoginForm: React.FC = () => {
       );
 
       router.push("/material_purchase");
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    } catch (error) {}
   };
 
   return (
