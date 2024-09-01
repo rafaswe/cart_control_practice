@@ -15,6 +15,7 @@ const MaterialPurchaseContainer = () => {
   const [tableData, setTableData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
+  const [page, setPage] = useState(1);
 
   //hooks
   const email = useSelector((state: RootState) => state.auth.email);
@@ -29,12 +30,17 @@ const MaterialPurchaseContainer = () => {
     setIsModalOpen(false);
   };
 
+  const handlePageChange = (event) => {
+    const newPageNum = Number(event.target.value);
+    if (newPageNum > -1) setPage(event.target.value);
+  };
+
   //Effects
   useEffect(() => {
     const fetchMaterialPurchases = async () => {
       try {
         await makeRequest({
-          endpoint: "auth/interview/material-purchase",
+          endpoint: `auth/interview/material-purchase?page=${page}`,
           method: "GET",
           privateRoute: true,
           onSuccess: (data) => {
@@ -51,7 +57,7 @@ const MaterialPurchaseContainer = () => {
     };
 
     fetchMaterialPurchases();
-  }, [transactionData]);
+  }, [transactionData, page]);
 
   return (
     <div className="w-full flex flex-col gap-4 pb-16 md:gap-16">
@@ -93,6 +99,21 @@ const MaterialPurchaseContainer = () => {
       ) : (
         <Skeleton />
       )}
+      <div className="px-[5%] w-full flex justify-between items-center">
+        <div className="flex items-center gap-4">
+          <label htmlFor="pageNumber" className="md:text-lg font-semibold">
+            Page:
+          </label>
+          <input
+            id="pageNumber"
+            type="number"
+            value={page}
+            min={0}
+            onChange={handlePageChange}
+            className="border border-gray-300 rounded-md focus:outline-none px-2 py-1 w-16"
+          />
+        </div>
+      </div>
       {isModalOpen && (
         <button
           className="fixed inset-0 bg-black w-full bg-opacity-50 flex justify-center items-center z-40"
