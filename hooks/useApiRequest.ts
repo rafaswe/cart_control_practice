@@ -1,4 +1,4 @@
-import { setCredentials } from "@/store/slices/authSlice"; // Adjust the path as needed
+import { setCredentials } from "@/store/slices/authSlice";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -23,7 +23,7 @@ export const useApiRequest = () => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
-  const token = useSelector((state: any) => state.auth.token); // Adjust the path to your token state
+  const token = useSelector((state: any) => state.auth.token);
 
   const makeRequest = async ({
     endpoint,

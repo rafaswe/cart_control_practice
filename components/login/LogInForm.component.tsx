@@ -4,8 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Spinner from "../common/Spinner.component";
 
-// Define the TypeScript types for the form inputs
-interface LoginFormInputs {
+interface LoginInputs {
   email: string;
   password: string;
 }
@@ -17,10 +16,10 @@ const LoginForm: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormInputs>();
+  } = useForm<LoginInputs>();
 
   //Actions
-  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
+  const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
     try {
       await makeRequest({
         endpoint: "interview/login",
