@@ -9,7 +9,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <head>
-        <title>Purchase Goods</title>
+        <title>Material Purchase</title>
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
       </head>
       <body className="flex w-full min-h-[100vh] bg-white justify-between">
